@@ -9,9 +9,9 @@ import com.robin.loginauth.backend.services.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -20,7 +20,7 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @Component
-public class UserAuthProvider {
+public class UserAuthenticationProvider {
 
     @Value("${security.jwt.token.secret-key:secret-value")
     private String secretKey;

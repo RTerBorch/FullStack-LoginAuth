@@ -1,64 +1,74 @@
 import * as React from "react";
-import WelcomeContent from "./WelcomeContent";
+
+import { request, setAuthHeader } from "../helpers/axios_helper";
+
+import Buttons from "./Buttons";
 import AuthContent from "./AuthContent";
 import LoginForm from "./LoginForm";
-import Buttons from "./Buttons";
-import { request } from "../axios_helper";
+import WelcomeContent from "./WelcomeContent";
 
 export default class AppContent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { compoonentToShow: "welcome" };
+    this.state = {
+      componentToShow: "welcome",
+    };
   }
 
   login = () => {
-    this.setState({ compoonentToShow: "login" });
+    this.setState({ componentToShow: "login" });
   };
 
   logout = () => {
-    this.setState({ compoonentToShow: "welcome" });
+    this.setState({ componentToShow: "welcome" });
+    setAuthHeader(null);
   };
 
   onLogin = (e, username, password) => {
     e.preventDefault();
-    request("POST", "/login", { login: username, password: password }).then(
-      (response) => {
-        this.setState({ compoonentToShow: "messages" }).catch((error) => {
-          this.setState({ compoonentToShow: "welcome" });
-        });
-      }
-    );
+    request("POST", "/login", {
+      login: username,
+      password: password,
+    })
+      .then((response) => {
+        setAuthHeader(response.data.token);
+        this.setState({ componentToShow: "messages" });
+      })
+      .catch((error) => {
+        setAuthHeader(null);
+        this.setState({ componentToShow: "welcome" });
+      });
   };
 
-  onRegister = (e, firstName, lastName, username, password) => {
-    e.preventDefault();
+  onRegister = (event, firstName, lastName, username, password) => {
+    event.preventDefault();
     request("POST", "/register", {
-      firstname: firstName,
+      firstName: firstName,
       lastName: lastName,
       login: username,
       password: password,
-    }).then((response) => {
-      this.setState({ compoonentToShow: "messages" }).catch((error) => {
-        this.setState({ compoonentToShow: "welcome" });
+    })
+      .then((response) => {
+        setAuthHeader(response.data.token);
+        this.setState({ componentToShow: "messages" });
+      })
+      .catch((error) => {
+        setAuthHeader(null);
+        this.setState({ componentToShow: "welcome" });
       });
-    });
   };
 
   render() {
     return (
-      <div>
-        <Buttons
-          login={this.login}
-          logout={this.logout}
-          register={this.register}
-        ></Buttons>
+      <>
+        <Buttons login={this.login} logout={this.logout} />
 
-        {this.state.compoonentToShow === "welcome" && <WelcomeContent />}
-        {this.state.compoonentToShow === "messages" && <AuthContent />}
-        {this.state.compoonentToShow === "login" && (
+        {this.state.componentToShow === "welcome" && <WelcomeContent />}
+        {this.state.componentToShow === "login" && (
           <LoginForm onLogin={this.onLogin} onRegister={this.onRegister} />
         )}
-      </div>
+        {this.state.componentToShow === "messages" && <AuthContent />}
+      </>
     );
   }
 }

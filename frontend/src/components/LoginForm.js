@@ -139,12 +139,12 @@ export default class LoginForm extends React.Component {
                 <div className="form-outline mb-4">
                   <input
                     type="text"
-                    id="LastName"
-                    name="LastName"
+                    id="lastName"
+                    name="lastName"
                     className="form-control"
                     onChange={this.onChangeHandler}
                   />
-                  <label className="form-label" htmlFor="LastName">
+                  <label className="form-label" htmlFor="lastName">
                     Last Name
                   </label>
                 </div>

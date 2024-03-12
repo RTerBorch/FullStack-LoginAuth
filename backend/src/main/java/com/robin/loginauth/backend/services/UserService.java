@@ -1,6 +1,5 @@
 package com.robin.loginauth.backend.services;
 
-import com.robin.loginauth.backend.config.UserAuthProvider;
 import com.robin.loginauth.backend.dto.CredentialsDto;
 import com.robin.loginauth.backend.dto.SignUpDto;
 import com.robin.loginauth.backend.dto.UserDto;
@@ -42,7 +41,7 @@ public class UserService {
             return userMapper.toUserDto(user);
         }
 
-        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST)
+        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
 public UserDto register(SignUpDto userDto) {
